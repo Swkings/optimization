@@ -1,0 +1,6 @@
+mop/fig
+/.vscode
+/vendor
+.DS_Store
+**/*.bak
+/.idea
