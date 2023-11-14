@@ -8,7 +8,7 @@ import (
  * 高斯消元法: 初等行变换
  */
 
-func GetUpperTriangularByGaussElimination[T util.Number](matrix [][]T) {
+func GetUpperTriangularByGaussElimination[T util.Number](matrix [][]T, opMatrixs ...[][]T) {
 	n, m := len(matrix), 0
 	if n > 0 {
 		m = len(matrix[0])
@@ -26,10 +26,16 @@ func GetUpperTriangularByGaussElimination[T util.Number](matrix [][]T) {
 		if matrix[i][maxElementIndex] == 0 {
 			if i != minElementIndex {
 				Swap(matrix, i, minElementIndex)
+				for index := range opMatrixs {
+					Swap(opMatrixs[index], i, minElementIndex)
+				}
 			}
 		} else {
 			if i != maxElementIndex {
 				Swap(matrix, i, maxElementIndex)
+				for index := range opMatrixs {
+					Swap(opMatrixs[index], i, maxElementIndex)
+				}
 			}
 		}
 
@@ -39,13 +45,19 @@ func GetUpperTriangularByGaussElimination[T util.Number](matrix [][]T) {
 		}
 
 		matrix[i] = util.ListTimes(matrix[i], []T{1 / rate})
+		for index := range opMatrixs {
+			opMatrixs[index][i] = util.ListTimes(opMatrixs[index][i], []T{1 / rate})
+		}
 		for nextIndex := i + 1; nextIndex < n; nextIndex++ {
 			matrix[nextIndex] = util.ListMinus(matrix[nextIndex], util.ListTimes(append([]T{}, matrix[i]...), []T{matrix[nextIndex][i]}))
+			for index := range opMatrixs {
+				opMatrixs[index][nextIndex] = util.ListMinus(opMatrixs[index][nextIndex], util.ListTimes(append([]T{}, opMatrixs[index][i]...), []T{opMatrixs[index][nextIndex][i]}))
+			}
 		}
 	}
 }
 
-func GetLowerTriangularByGaussElimination[T util.Number](matrix [][]T) {
+func GetLowerTriangularByGaussElimination[T util.Number](matrix [][]T, opMatrixs ...[][]T) {
 	n, m := len(matrix), 0
 	if n > 0 {
 		m = len(matrix[0])
@@ -61,10 +73,16 @@ func GetLowerTriangularByGaussElimination[T util.Number](matrix [][]T) {
 		if matrix[i][maxElementIndex] == 0 {
 			if i != minElementIndex {
 				Swap(matrix, i, minElementIndex)
+				for index := range opMatrixs {
+					Swap(opMatrixs[index], i, minElementIndex)
+				}
 			}
 		} else {
 			if i != maxElementIndex {
 				Swap(matrix, i, maxElementIndex)
+				for index := range opMatrixs {
+					Swap(opMatrixs[index], i, maxElementIndex)
+				}
 			}
 		}
 
@@ -74,13 +92,19 @@ func GetLowerTriangularByGaussElimination[T util.Number](matrix [][]T) {
 		}
 
 		matrix[i] = util.ListTimes(matrix[i], []T{1 / rate})
+		for index := range opMatrixs {
+			opMatrixs[index][i] = util.ListTimes(opMatrixs[index][i], []T{1 / rate})
+		}
 		for nextIndex := i - 1; nextIndex >= 0; nextIndex-- {
 			matrix[nextIndex] = util.ListMinus(matrix[nextIndex], util.ListTimes(append([]T{}, matrix[i]...), []T{matrix[nextIndex][i]}))
+			for index := range opMatrixs {
+				opMatrixs[index][nextIndex] = util.ListMinus(opMatrixs[index][nextIndex], util.ListTimes(append([]T{}, opMatrixs[index][i]...), []T{opMatrixs[index][nextIndex][i]}))
+			}
 		}
 	}
 }
 
-func GetUnitMatrixByUpperTriangular[T util.Number](matrix [][]T) {
+func GetUnitMatrixByUpperTriangular[T util.Number](matrix [][]T, opMatrixs ...[][]T) {
 	n, m := len(matrix), 0
 	if n > 0 {
 		m = len(matrix[0])
@@ -97,11 +121,14 @@ func GetUnitMatrixByUpperTriangular[T util.Number](matrix [][]T) {
 			for j := k; j < m; j++ {
 				matrix[i][j] -= rate * matrix[k][j]
 			}
+			for index := range opMatrixs {
+				opMatrixs[index][i] = util.ListMinus(opMatrixs[index][i], util.ListTimes(append([]T{}, opMatrixs[index][k]...), []T{rate}))
+			}
 		}
 	}
 }
 
-func GetUnitMatrixByLowerTriangular[T util.Number](matrix [][]T) {
+func GetUnitMatrixByLowerTriangular[T util.Number](matrix [][]T, opMatrixs ...[][]T) {
 	n, m := len(matrix), 0
 	if n > 0 {
 		m = len(matrix[0])
@@ -117,8 +144,12 @@ func GetUnitMatrixByLowerTriangular[T util.Number](matrix [][]T) {
 			}
 			for j := k; j >= 0; j-- {
 				matrix[i][j] -= rate * matrix[k][j]
+
 			}
 			matrix[i][m-1] -= rate * matrix[k][m-1]
+			for index := range opMatrixs {
+				opMatrixs[index][i] = util.ListMinus(opMatrixs[index][i], util.ListTimes(append([]T{}, opMatrixs[index][k]...), []T{rate}))
+			}
 		}
 	}
 }
