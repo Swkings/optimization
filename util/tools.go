@@ -179,6 +179,7 @@ type Number interface {
 //	Range(num) -> 0..num-1
 //	Range(startNum, stopNum) -> startNum..stopNum
 //	Range(startNum, stopNum, step) -> startNum, startNum+step, startNum+2*step..., startNum+n*step<stopNum
+//
 // Range general integer sequence
 func Range[T IntNum](args ...T) []T {
 	list := []T{}
@@ -327,15 +328,16 @@ func MaxListOpt[T any, V Number](l []T, f func(T) V) (V, int) {
 	if len(l) == 0 {
 		return 0, -1
 	}
-	minIndex := 0
+	maxIndex := 0
 	maxValue := f(l[0])
-	for _, item := range l {
+	for i, item := range l {
 		if f(item) > maxValue {
 			maxValue = f(item)
+			maxIndex = i
 		}
 	}
 
-	return maxValue, minIndex
+	return maxValue, maxIndex
 }
 
 // MinListOpt return min number and index of list, the compared value cal by f
@@ -355,7 +357,33 @@ func MinListOpt[T any, V Number](l []T, f func(T) V) (V, int) {
 	return minValue, minIndex
 }
 
+// MaxMinListOpt return max and minnindex of list, the compared value cal by f
+func MaxMinListOpt[T any, V Number](l []T, f func(T) V) (int, int) {
+	if len(l) == 0 {
+		return -1, -1
+	}
+	if len(l) == 1 {
+		return 0, 0
+	}
+
+	minIndex, maxIndex := 0, 0
+	minValue, maxValue := f(l[0]), f(l[0])
+	for i, item := range l {
+		if f(item) < minValue {
+			minValue = f(item)
+			minIndex = i
+		}
+		if f(item) > maxValue {
+			maxValue = f(item)
+			maxIndex = i
+		}
+	}
+
+	return minIndex, maxIndex
+}
+
 //	if condition is true return ifTrue, else return elseFalse.
+//
 // Ternary expression
 func Ternary[T any](condition bool, ifTrue, elseFalse T) T {
 	if condition {
@@ -473,6 +501,7 @@ func ElementInList[T comparable](elem T, l []T) bool {
 }
 
 //	map{k1:v1, k2:v2} => slice[k1, v1, k2, v2]
+//
 // MapUnpack unpack map into kv list
 func MapUnpack[K comparable, V interface{}](m map[K]V) []interface{} {
 	res := []interface{}{}
