@@ -169,11 +169,11 @@ func GetFmtSelfDefaultFuncName(funcName string, args ...string) string {
 }
 
 type IntNum interface {
-	int | int8 | int32 | int64 | uint | uint8 | uint32 | uint64
+	~int | ~int8 | ~int16 | ~int32 | ~int64 | ~uint | ~uint8 | ~uint16 | ~uint32 | ~uint64
 }
 
 type Number interface {
-	IntNum | float32 | float64
+	IntNum | ~float32 | ~float64
 }
 
 //	Range(num) -> 0..num-1

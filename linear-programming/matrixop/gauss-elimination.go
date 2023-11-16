@@ -8,7 +8,7 @@ import (
  * 高斯消元法: 初等行变换
  */
 
-func GetUpperTriangularByGaussElimination[T util.Number](matrix [][]T, opMatrixs ...[][]T) {
+func GetUpperTriangularByGaussElimination[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) {
 	n, m := len(matrix), 0
 	if n > 0 {
 		m = len(matrix[0])
@@ -57,7 +57,7 @@ func GetUpperTriangularByGaussElimination[T util.Number](matrix [][]T, opMatrixs
 	}
 }
 
-func GetLowerTriangularByGaussElimination[T util.Number](matrix [][]T, opMatrixs ...[][]T) {
+func GetLowerTriangularByGaussElimination[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) {
 	n, m := len(matrix), 0
 	if n > 0 {
 		m = len(matrix[0])
@@ -104,7 +104,7 @@ func GetLowerTriangularByGaussElimination[T util.Number](matrix [][]T, opMatrixs
 	}
 }
 
-func GetUnitMatrixByUpperTriangular[T util.Number](matrix [][]T, opMatrixs ...[][]T) {
+func GetUnitMatrixByUpperTriangular[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) {
 	n, m := len(matrix), 0
 	if n > 0 {
 		m = len(matrix[0])
@@ -128,7 +128,7 @@ func GetUnitMatrixByUpperTriangular[T util.Number](matrix [][]T, opMatrixs ...[]
 	}
 }
 
-func GetUnitMatrixByLowerTriangular[T util.Number](matrix [][]T, opMatrixs ...[][]T) {
+func GetUnitMatrixByLowerTriangular[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) {
 	n, m := len(matrix), 0
 	if n > 0 {
 		m = len(matrix[0])
