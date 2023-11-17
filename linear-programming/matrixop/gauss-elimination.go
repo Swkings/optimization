@@ -1,6 +1,8 @@
 package matrixop
 
 import (
+	"slices"
+
 	"github.com/swkings/optimization/util"
 )
 
@@ -8,7 +10,7 @@ import (
  * 高斯消元法: 初等行变换
  */
 
-func GetUpperTriangularByGaussElimination[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) {
+func UpperTriangularByGaussElimination[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) {
 	n, m := len(matrix), 0
 	if n > 0 {
 		m = len(matrix[0])
@@ -57,7 +59,14 @@ func GetUpperTriangularByGaussElimination[S ~[][]T, T util.Number](matrix S, opM
 	}
 }
 
-func GetLowerTriangularByGaussElimination[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) {
+func GetUpperTriangularByGaussElimination[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) S {
+	copyMatrix := slices.Clone(matrix)
+	UpperTriangularByGaussElimination(copyMatrix)
+
+	return copyMatrix
+}
+
+func LowerTriangularByGaussElimination[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) {
 	n, m := len(matrix), 0
 	if n > 0 {
 		m = len(matrix[0])
@@ -104,7 +113,14 @@ func GetLowerTriangularByGaussElimination[S ~[][]T, T util.Number](matrix S, opM
 	}
 }
 
-func GetUnitMatrixByUpperTriangular[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) {
+func GetLowerTriangularByGaussElimination[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) S {
+	copyMatrix := slices.Clone(matrix)
+	LowerTriangularByGaussElimination(copyMatrix)
+
+	return copyMatrix
+}
+
+func UnitMatrixByUpperTriangular[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) {
 	n, m := len(matrix), 0
 	if n > 0 {
 		m = len(matrix[0])
@@ -128,7 +144,14 @@ func GetUnitMatrixByUpperTriangular[S ~[][]T, T util.Number](matrix S, opMatrixs
 	}
 }
 
-func GetUnitMatrixByLowerTriangular[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) {
+func GetUnitMatrixByUpperTriangular[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) S {
+	copyMatrix := slices.Clone(matrix)
+	UnitMatrixByUpperTriangular(copyMatrix)
+
+	return copyMatrix
+}
+
+func UnitMatrixByLowerTriangular[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) {
 	n, m := len(matrix), 0
 	if n > 0 {
 		m = len(matrix[0])
@@ -152,4 +175,35 @@ func GetUnitMatrixByLowerTriangular[S ~[][]T, T util.Number](matrix S, opMatrixs
 			}
 		}
 	}
+}
+
+func GetUnitMatrixByLowerTriangular[S ~[][]T, T util.Number](matrix S, opMatrixs ...S) S {
+	copyMatrix := slices.Clone(matrix)
+	UnitMatrixByLowerTriangular(copyMatrix)
+
+	return copyMatrix
+}
+
+func UnitMatrix[S ~[][]T, T util.Number](matrix S) {
+	GetUpperTriangularByGaussElimination(matrix)
+	GetUnitMatrixByUpperTriangular(matrix)
+}
+
+func GetUnitMatrix[S ~[][]T, T util.Number](matrix S) S {
+	copyMatrix := slices.Clone(matrix)
+	GetUpperTriangularByGaussElimination(copyMatrix)
+	GetUnitMatrixByUpperTriangular(copyMatrix)
+
+	return copyMatrix
+}
+
+func GetInverseMatrixByGaussElimination[S ~[][]T, T util.Number](matrix S) S {
+	var (
+		copyMatrix      = slices.Clone(matrix)
+		inverseMatrix S = I[T](len(matrix))
+	)
+	UpperTriangularByGaussElimination(copyMatrix, inverseMatrix)
+	UnitMatrixByUpperTriangular(copyMatrix, inverseMatrix)
+
+	return inverseMatrix
 }
