@@ -3,13 +3,13 @@ package matrixop
 import "github.com/swkings/optimization/util"
 
 func I[T util.Number](n int) [][]T {
-	var iMaxtrix [][]T = make([][]T, n)
+	var iMatrix [][]T = make([][]T, n)
 	for i := 0; i < n; i++ {
-		iMaxtrix[i] = make([]T, n)
-		iMaxtrix[i][i] = 1
+		iMatrix[i] = make([]T, n)
+		iMatrix[i][i] = 1
 	}
 
-	return iMaxtrix
+	return iMatrix
 }
 
 func Swap[T any](arr []T, i int, j int) {
